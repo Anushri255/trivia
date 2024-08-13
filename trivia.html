@@ -3,9 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trivia Game</title>
     <style>
+        /* styles.css */
         body {
             font-family: 'Arial', sans-serif;
             background: linear-gradient(to right, #ff9a9e, #fad0c4);
@@ -59,9 +59,10 @@
             background-color: #ffb300;
         }
 
-        #score-container {
-            font-size: 24px;
-            margin-bottom: 20px;
+        #status {
+            font-size: 20px;
+            margin: 20px 0;
+            color: #d32f2f;
         }
 
         #next-button {
@@ -89,76 +90,81 @@
             <div id="answers">
             </div>
         </div>
-        <div id="score-container">
-            <p id="score">Score: 0</p>
+        <div id="status">
         </div>
         <button id="next-button">Next Question</button>
     </div>
-</body>
-<script>
-    const questions = [
-        {
-            question: "What is the capital of France?",
-            answers: ["Berlin", "Madrid", "Paris", "Lisbon"],
-            correct: "Paris"
-        },
-        {
-            question: "What is the largest ocean on Earth?",
-            answers: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
-            correct: "Pacific Ocean"
-        },
-        {
-            question: "Which planet is known as the Red Planet?",
-            answers: ["Earth", "Venus", "Mars", "Jupiter"],
-            correct: "Mars"
-        },
-    ];
+    <script>
+        // script.js
+        const questions = [
+    { question: "What is the capital of France?", options: ["Berlin", "Madrid", "Paris", "Rome"], answer: "Paris" },
+    { question: "What is the largest planet in our solar system?", options: ["Earth", "Jupiter", "Mars", "Saturn"], answer: "Jupiter" },
+    { question: "What is the chemical symbol for gold?", options: ["Au", "Ag", "Pb", "Fe"], answer: "Au" },
+    { question: "Who wrote 'To Kill a Mockingbird'?", options: ["Harper Lee", "J.K. Rowling", "Ernest Hemingway", "Mark Twain"], answer: "Harper Lee" },
+    { question: "What is the smallest prime number?", options: ["0", "1", "2", "3"], answer: "2" },
+    { question: "Which element has the atomic number 1?", options: ["Hydrogen", "Helium", "Oxygen", "Carbon"], answer: "Hydrogen" },
+    { question: "Who painted the Mona Lisa?", options: ["Vincent van Gogh", "Leonardo da Vinci", "Claude Monet", "Pablo Picasso"], answer: "Leonardo da Vinci" },
+    { question: "What is the hardest natural substance on Earth?", options: ["Gold", "Iron", "Diamond", "Platinum"], answer: "Diamond" },
+    { question: "What is the longest river in the world?", options: ["Nile", "Amazon", "Yangtze", "Mississippi"], answer: "Nile" },
+    { question: "Which planet is known as the Red Planet?", options: ["Venus", "Earth", "Mars", "Uranus"], answer: "Mars" }
+];
 
-    let currentQuestionIndex = 0;
-    let score = 0;
 
-    const questionElement = document.getElementById('question');
-    const answersElement = document.getElementById('answers');
-    const scoreElement = document.getElementById('score');
-    const nextButton = document.getElementById('next-button');
+        let currentQuestionIndex = 0;
+        let score = 0;
 
-    function showQuestion(question) {
-        questionElement.textContent = question.question;
-        answersElement.innerHTML = '';
-        question.answers.forEach(answer => {
-            const button = document.createElement('button');
-            button.textContent = answer;
-            button.classList.add('answer-button');
-            button.addEventListener('click', () => checkAnswer(answer, question.correct));
-            answersElement.appendChild(button);
-        });
-    }
+        const questionElement = document.getElementById('question');
+        const answersElement = document.getElementById('answers');
+        const statusElement = document.getElementById('status');
+        const nextButton = document.getElementById('next-button');
 
-    function checkAnswer(selected, correct) {
-        if (selected === correct) {
-            score++;
-            scoreElement.textContent = `Score: ${score}`;
-        }
-        nextButton.disabled = false;
-    }
-
-    function showNextQuestion() {
-        if (currentQuestionIndex < questions.length - 1) {
-            currentQuestionIndex++;
-            showQuestion(questions[currentQuestionIndex]);
-            nextButton.disabled = true;
-        } else {
-            questionElement.textContent = 'Game Over! Your final score is ' + score;
+        function showQuestion(question) {
+            questionElement.textContent = question.question;
             answersElement.innerHTML = '';
-            nextButton.style.display = 'none';
+            statusElement.textContent = '';
+            question.answers.forEach(answer => {
+                const button = document.createElement('button');
+                button.textContent = answer;
+                button.classList.add('answer-button');
+                button.addEventListener('click', () => checkAnswer(answer, question.correct));
+                answersElement.appendChild(button);
+            });
         }
-    }
 
-    nextButton.addEventListener('click', showNextQuestion);
+        function checkAnswer(selected, correct) {
+            if (selected === correct) {
+                statusElement.textContent = 'Correct! Moving to next question...';
+                statusElement.style.color = '#4caf50';
+                score++;
+                setTimeout(() => {
+                    nextButton.style.display = 'block';
+                    nextButton.disabled = false;
+                }, 1000); // Show the "Next Question" button after a short delay
+            } else {
+                statusElement.textContent = 'Incorrect. Try again!';
+                statusElement.style.color = '#d32f2f';
+            }
+        }
 
-    showQuestion(questions[currentQuestionIndex]);
-    nextButton.disabled = true;
+        function showNextQuestion() {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                showQuestion(questions[currentQuestionIndex]);
+                nextButton.disabled = true;
+            } else {
+                questionElement.textContent = 'Game Over! Your final score is ' + score;
+                answersElement.innerHTML = '';
+                nextButton.style.display = 'none';
+            }
+        }
 
-</script>
+        nextButton.addEventListener('click', showNextQuestion);
+
+        // Initialize the game
+        showQuestion(questions[currentQuestionIndex]);
+        nextButton.style.display = 'none'; // Hide the "Next Question" button initially
+
+    </script>
+</body>
 
 </html>
