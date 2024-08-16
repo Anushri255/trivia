@@ -2,6 +2,8 @@
 
 A simple and colorful quiz application built with HTML, CSS, and JavaScript. The app allows users to test their knowledge with multiple-choice questions. It supports both single-player (user vs. computer) and multiplayer (two players) modes.
 
+## Hosted on https://anushri255.github.io/trivia.io/
+
 ## Features
 
 - Colorful and bright styling
